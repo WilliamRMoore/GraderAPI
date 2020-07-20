@@ -42,20 +42,17 @@ namespace ComparativeGraderAPI.Persistence
                 {
                     new Semester
                     {
-                        EndDate = DateTime.Today,
-                        StartDate = DateTime.Today.AddDays(-30)
+                        Season = "FALL"
                     },
 
                     new Semester
                     {
-                        EndDate = DateTime.Today.AddDays(-30),
-                        StartDate = DateTime.Today.AddDays(-60)
+                        Season = "SPRING"
                     },
 
                     new Semester
                     {
-                        EndDate = DateTime.Today.AddDays(-60),
-                        StartDate = DateTime.Today.AddDays(-90)
+                        Season = "SUMMER"
                     }
                 };
 

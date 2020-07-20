@@ -1,6 +1,7 @@
 ﻿using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
 using ComparativeGraderAPI.Domain;
 using ComparativeGraderAPI.Persistence;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
 {
-    public class GradingDataAccess : IGradingDataAccess
+    public class SemestersAccess : ISemestersAccess
     {
         private readonly GradingDataContext _context;
 
-        public GradingDataAccess(GradingDataContext context)
+        public SemestersAccess(GradingDataContext context)
         {
             _context = context;
         }
@@ -25,6 +26,10 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             if (success) return success;
 
             throw new Exception("Problem saving changes");
+        }
+        public async Task<List<Semester>> ListSemesters()
+        {
+            return await _context.Semesters.ToListAsync();
         }
     }
 }

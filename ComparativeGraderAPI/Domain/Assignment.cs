@@ -12,8 +12,7 @@ namespace ComparativeGraderAPI.Domain
         //public string ProfessorUserId { get; set; }
         public string AssignmentName { get; set; }
         public string AssignmentDescription { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime DueDate { get; set; }
         public ICollection<Submission>  Submissions { get; set; }
     }
 }

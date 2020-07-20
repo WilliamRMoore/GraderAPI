@@ -51,11 +51,11 @@ namespace ComparativeGraderAPI
                 });
             });
 
-            services.AddMediatR(typeof(Create.Handler).Assembly);
+            services.AddMediatR(typeof(List.Handler).Assembly);
 
             services.AddControllers().AddFluentValidation(cfg =>
             {
-                cfg.RegisterValidatorsFromAssemblyContaining<Create>();
+                cfg.RegisterValidatorsFromAssemblyContaining<List>();
             });
 
             //services.AddIdentityCore<ProfessorUser>()
@@ -82,7 +82,7 @@ namespace ComparativeGraderAPI
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
-            services.AddScoped<IGradingDataAccess, GradingDataAccess>();
+            services.AddScoped<ISemestersAccess, SemestersAccess>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
