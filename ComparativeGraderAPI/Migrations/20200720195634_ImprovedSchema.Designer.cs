@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComparativeGraderAPI.Migrations
 {
     [DbContext(typeof(GradingDataContext))]
-    [Migration("20200720194856_ImprovedSchema")]
+    [Migration("20200720195634_ImprovedSchema")]
     partial class ImprovedSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,9 @@ namespace ComparativeGraderAPI.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ProfessorUserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

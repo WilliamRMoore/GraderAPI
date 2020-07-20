@@ -9,7 +9,7 @@ namespace ComparativeGraderAPI.Domain
     {
         public int Id { get; set; }
         public int CourseId { get; set; }
-        //public string ProfessorUserId { get; set; }
+        public string ProfessorUserId { get; set; }
         public string AssignmentName { get; set; }
         public string AssignmentDescription { get; set; }
         public DateTime DueDate { get; set; }

@@ -62,6 +62,11 @@ namespace ComparativeGraderAPI.Migrations
                 table: "Assignments",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "ProfessorUserId",
+                table: "Assignments",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -88,6 +93,10 @@ namespace ComparativeGraderAPI.Migrations
 
             migrationBuilder.DropColumn(
                 name: "DueDate",
+                table: "Assignments");
+
+            migrationBuilder.DropColumn(
+                name: "ProfessorUserId",
                 table: "Assignments");
 
             migrationBuilder.AddColumn<DateTime>(
