@@ -22,7 +22,6 @@ namespace ComparativeGraderAPI.Security
             var userId = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(claim =>
             claim.Type == ClaimTypes.NameIdentifier)?.Value;
 
-
             return userId;
         }
 
