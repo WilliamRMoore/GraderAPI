@@ -24,6 +24,8 @@ namespace ComparativeGraderAPI.Application.Courses
 
             public async Task<List<Course>> Handle(Query request, CancellationToken cancellationToken)
             {
+                //TODO: Impliment pageination
+
                 var courses = await _courseAccess.ListCourses();
 
                 return courses.ToList();

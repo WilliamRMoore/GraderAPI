@@ -46,7 +46,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             return courses;
         }
 
-        public async Task<bool> EditCourse(int courseId, Command request)
+        public async Task<bool> EditCourse(int courseId, Command request)//This probably shouldnt handle the command, fix this later.
         {
             var currentCourse = await _context.Courses.FindAsync(courseId);
             
