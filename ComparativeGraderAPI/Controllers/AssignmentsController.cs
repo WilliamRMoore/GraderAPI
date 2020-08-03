@@ -16,6 +16,7 @@ namespace ComparativeGraderAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Assignment>>> List()
         {
+            //TODO: List assignments by courseId to only get assignments relevent to the current course. Use URI navigation.
             return await Mediator.Send(new List.Query());
         }
 

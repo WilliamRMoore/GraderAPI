@@ -8,12 +8,13 @@ namespace ComparativeGraderAPI.Domain
     public class Submission
     {
         public int Id { get; set; }
+        public string ProfessorUserId { get; set; }
         public int AssignmentId { get; set; }
 
         //public int SubmittedArtifactId { get; set; }
 
         public string StudentName { get; set; }
-        public int Rank { get; set; }
-        public double Grade { get; set; }
+        public int Rank { get; set; } = 0;
+        public double Grade { get; set; } = 0;
     }
 }
