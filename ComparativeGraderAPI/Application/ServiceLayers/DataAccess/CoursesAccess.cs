@@ -75,16 +75,6 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
 
             var course = await _context.Courses.FindAsync(id);
 
-            if (course == null)
-            {
-                throw new RestException(HttpStatusCode.NotFound, new { activity = "NOT FOUND" });
-            }
-
-            if (course.ProfessorUserId != _userAccessor.GetCurrentUserId())//Make sure the current user is authorized to delete this entry.
-            {
-                throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            }
-
             _context.Remove(course);
 
             var success = await _context.SaveChangesAsync() > 0;

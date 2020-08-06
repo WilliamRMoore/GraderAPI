@@ -12,7 +12,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.Interfaces
         Task<bool> AddAssignment(Assignment assignment);
         Task<IEnumerable<Assignment>> ListAssignments();
         Task<Assignment> AssignmentDetails(int id);
-        Task<bool> EditAssignment(Command assignmentEdits);
+        Task<bool> EditAssignment(Command assignmentEdits, Assignment assignment);
         Task<bool> DeleteAssignment(int id);
     }
 }

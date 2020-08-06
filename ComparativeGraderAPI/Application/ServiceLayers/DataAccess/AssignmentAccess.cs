@@ -60,19 +60,8 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             return assignment;
         }
 
-        public async Task<bool> EditAssignment(Command assignmentEdits)
+        public async Task<bool> EditAssignment(Command assignmentEdits, Assignment currentAssignment)
         {
-            var currentAssignment = await _gradingDataContext.Assignments.FindAsync(assignmentEdits.Id);
-
-            if (currentAssignment == null)
-            {
-                throw new RestException(HttpStatusCode.NotFound, new { activity = "NOT FOUND" });
-            }
-
-            if (currentAssignment.ProfessorUserId != _userAccessor.GetCurrentUserId())//Make sure the current user is authorized to edit this entry.
-            {
-                throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            }
 
             currentAssignment.AssignmentDescription = assignmentEdits.AssignmentDescription ?? currentAssignment.AssignmentDescription;
             currentAssignment.AssignmentName = assignmentEdits.AssignmentName ?? currentAssignment.AssignmentName;
