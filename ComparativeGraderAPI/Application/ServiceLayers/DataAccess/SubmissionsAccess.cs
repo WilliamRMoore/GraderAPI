@@ -26,13 +26,6 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
 
         public async Task<Submission> AddSubmission(Submission submission)
         {
-            //var auth = _gradingDataContext.Assignments.Find(submission.AssignmentId).ProfessorUserId.Equals(_userAccessor.GetCurrentUserId());
-            //var auth = _gradingDataContext.Assignments.Any(a => a.Id == submission.Id && a.ProfessorUserId == _userAccessor.GetCurrentUserId());
-
-            //if (!auth)
-            //{
-            //    throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            //}
 
             submission.ProfessorUserId = _userAccessor.GetCurrentUserId();
 
@@ -59,10 +52,8 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             return submission;
         }
 
-        public async Task<bool> DeleteSubmission(int id)
+        public async Task<bool> DeleteSubmission(Submission submission)
         {
-            var submission = await _gradingDataContext.Submissions.FindAsync(id);
-
             _gradingDataContext.Submissions.Remove(submission);
 
             var success = await _gradingDataContext.SaveChangesAsync() > 0;
@@ -75,13 +66,13 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             throw new Exception("Problem saving changes.");
         }
 
-        public async Task<bool> EditSubmission(Command submissionEdits)
+        public async Task<bool> EditSubmission(Command submissionEdits, Submission submissionToEdit)
         {
-            var currentSubmission = await _gradingDataContext.Submissions.FindAsync(submissionEdits.SubmissionId);
+            //var currentSubmission = await _gradingDataContext.Submissions.FindAsync(submissionEdits.SubmissionId);
 
-            currentSubmission.StudentName = submissionEdits.StudentName ?? currentSubmission.StudentName;
+            submissionToEdit.StudentName = submissionEdits.StudentName ?? submissionToEdit.StudentName;
             //currentSubmission.Rank = submissionEdits.Rank;
-            currentSubmission.Grade = submissionEdits.Grade;
+            submissionToEdit.Grade = submissionEdits.Grade;
 
             var success = await _gradingDataContext.SaveChangesAsync() > 0;
 

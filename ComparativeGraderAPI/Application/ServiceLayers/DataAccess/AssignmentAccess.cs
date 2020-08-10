@@ -23,7 +23,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             _gradingDataContext = gradingDataContext;
         }
 
-        public async Task<bool> AddAssignment(Assignment assignment)
+        public async Task AddAssignment(Assignment assignment)
         {
             assignment.ProfessorUserId = _userAccessor.GetCurrentUserId();
 
@@ -31,7 +31,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
 
             var success = await _gradingDataContext.SaveChangesAsync() > 0;
 
-            if (success) return success;
+            if (success) return;
 
             throw new Exception("Problem saving changes");
         }
@@ -60,7 +60,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             return assignment;
         }
 
-        public async Task<bool> EditAssignment(Command assignmentEdits, Assignment currentAssignment)
+        public async Task EditAssignment(Command assignmentEdits, Assignment currentAssignment)
         {
 
             currentAssignment.AssignmentDescription = assignmentEdits.AssignmentDescription ?? currentAssignment.AssignmentDescription;
@@ -71,25 +71,15 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
 
             if(success)
             {
-                return success;
+                return;
             }
 
             throw new Exception("Problem saving changes.");
         }
 
-        public async Task<bool> DeleteAssignment(int id)
+        public async Task DeleteAssignment(int id)
         {
             var assignment = await _gradingDataContext.Assignments.FindAsync(id);
-
-            if (assignment == null)
-            {
-                throw new RestException(HttpStatusCode.NotFound, new { activity = "NOT FOUND" });
-            }
-
-            if (assignment.ProfessorUserId != _userAccessor.GetCurrentUserId())//Make sure the current user is authorized to delete this entry.
-            {
-                throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            }
 
             _gradingDataContext.Assignments.Remove(assignment);
 
@@ -97,7 +87,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
 
             if (success)
             {
-                return success;
+                return;
             }
 
             throw new Exception("Problem saving changes.");

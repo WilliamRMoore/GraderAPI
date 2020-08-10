@@ -89,6 +89,8 @@ namespace ComparativeGraderAPI
             services.AddScoped<IAssignmentAccess, AssignmentAccess>();
             services.AddScoped<ISubmissionsAccess, SubmissionsAccess>();
             services.AddScoped<ICourseVerifier, CourseVerifier>();
+            services.AddScoped<IAssignmentVerifier, AssignmentVerifier>();
+            services.AddScoped<IDomainVerifier, DomainVerifier>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

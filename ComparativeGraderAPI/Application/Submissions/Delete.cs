@@ -1,4 +1,6 @@
 ﻿using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
+using ComparativeGraderAPI.Domain;
+using ComparativeGraderAPI.Security.Security_Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,15 +20,21 @@ namespace ComparativeGraderAPI.Application.Submissions
         public class Handler : IRequestHandler<Command>
         {
             private readonly ISubmissionsAccess _submissionsAccess;
+            private readonly IDomainVerifier _domainVerifier;
 
-            public Handler(ISubmissionsAccess submissionsAccess)
+            public Handler(ISubmissionsAccess submissionsAccess, IDomainVerifier domainVerifier)
             {
                 _submissionsAccess = submissionsAccess;
+                _domainVerifier = domainVerifier;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                await _submissionsAccess.DeleteSubmission(request.SubmissionId);
+                var submissionToDelete = await _submissionsAccess.SubmissionDetails(request.SubmissionId);
+
+                _domainVerifier.Verify<Submission>(submissionToDelete);
+
+                await _submissionsAccess.DeleteSubmission(submissionToDelete);
 
                 return Unit.Value;
             }

@@ -36,29 +36,21 @@ namespace ComparativeGraderAPI.Application.Assingments
         public class Handler : IRequestHandler<Command>
         {
             private readonly IAssignmentAccess _assignmentAccess;
-            private readonly IUserAccessor _userAccessor;
+            private readonly IDomainVerifier _domainVerifier;
 
-            public Handler(IAssignmentAccess assignmentAccess, IUserAccessor userAccessor)
+            public Handler(IAssignmentAccess assignmentAccess, IDomainVerifier domainVerifier)
             {
                 _assignmentAccess = assignmentAccess;
-                _userAccessor = userAccessor;
+                _domainVerifier = domainVerifier;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var currentAssignment = await _assignmentAccess.AssignmentDetails(request.Id);
 
-                if (currentAssignment == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound, new { Assignment = "NOT FOUND" });
-                }
+                _domainVerifier.Verify<Assignment>(currentAssignment);
 
-                if (currentAssignment.ProfessorUserId != _userAccessor.GetCurrentUserId())
-                {
-                    throw new RestException(HttpStatusCode.Unauthorized, new { Assignment = "UNAUTHORIZED" });
-                }
-
-                var success = await _assignmentAccess.EditAssignment(request, currentAssignment);
+                await _assignmentAccess.EditAssignment(request, currentAssignment);
 
                 return Unit.Value;
             }

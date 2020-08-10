@@ -12,7 +12,7 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.Interfaces
         Task<Submission> AddSubmission(Submission submission);
         Task<IEnumerable<Submission>> ListSubmissions();
         Task<Submission> SubmissionDetails(int id);
-        Task<bool> DeleteSubmission(int id);
-        Task<bool> EditSubmission(Command submissionEdits);
+        Task<bool> DeleteSubmission(Submission submission);
+        Task<bool> EditSubmission(Command submissionEdits, Submission submissionToEdit);
     }
 }

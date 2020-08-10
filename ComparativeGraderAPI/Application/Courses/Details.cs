@@ -1,5 +1,6 @@
 ﻿using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
 using ComparativeGraderAPI.Domain;
+using ComparativeGraderAPI.Security.Security_Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,19 @@ namespace ComparativeGraderAPI.Application.Courses
         public class Handler : IRequestHandler<Query, Course>
         {
             private readonly ICourseAccess _courseAccess;
+            private readonly ICourseVerifier _courseVerifier;
 
-            public Handler(ICourseAccess courseAccess)
+            public Handler(ICourseAccess courseAccess, ICourseVerifier courseVerifier)
             {
                 _courseAccess = courseAccess;
+                _courseVerifier = courseVerifier;
             }
 
-            public Task<Course> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Course> Handle(Query request, CancellationToken cancellationToken)
             {
-                var course = _courseAccess.CourseDetails(request.CourseId);
+                var course = await _courseAccess.CourseDetails(request.CourseId);
+
+                _courseVerifier.Verify(course);
 
                 return course;
             }

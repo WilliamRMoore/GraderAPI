@@ -1,4 +1,5 @@
 ﻿using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
+using ComparativeGraderAPI.Security.Security_Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,21 @@ namespace ComparativeGraderAPI.Application.Assingments
         public class Handler : IRequestHandler<Command>
         {
             private readonly IAssignmentAccess _assignmentAccess;
+            private readonly IDomainVerifier _domainVerifier;
+            private readonly IAssignmentVerifier _assignmentVerifier;
 
-            public Handler(IAssignmentAccess assignmentAccess)
+            public Handler(IAssignmentAccess assignmentAccess, IDomainVerifier domainVerifier)
             {
                 _assignmentAccess = assignmentAccess;
+                _domainVerifier = domainVerifier;
             }
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var success = await _assignmentAccess.DeleteAssignment(request.Id);
+                var assignmentToDelete = await _assignmentAccess.AssignmentDetails(request.Id);
+
+                _assignmentVerifier.Verify(assignmentToDelete);
+
+                await _assignmentAccess.DeleteAssignment(request.Id);
 
                 return Unit.Value;
             }

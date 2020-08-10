@@ -1,5 +1,6 @@
 ﻿using ComparativeGraderAPI.Application.Errors;
 using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
+using ComparativeGraderAPI.Domain;
 using ComparativeGraderAPI.Security.Security_Interfaces;
 using MediatR;
 using System;
@@ -21,19 +22,19 @@ namespace ComparativeGraderAPI.Application.Courses
         public class Handler : IRequestHandler<Command>
         {
             private readonly ICourseAccess _courseAccess;
-            private readonly ICourseVerifier _courseVerifier;
+            private readonly IDomainVerifier _domainVerifier;
 
-            public Handler(ICourseAccess courseAccess, ICourseVerifier courseVerifier)
+            public Handler(ICourseAccess courseAccess, IDomainVerifier domainVerifier)
             {
                 _courseAccess = courseAccess;
-                _courseVerifier = courseVerifier;
+                _domainVerifier = domainVerifier;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var courseToDelete = await _courseAccess.CourseDetails(request.CourseId);
 
-                _courseVerifier.Verify(courseToDelete);
+                _domainVerifier.Verify<Course>(courseToDelete);
 
                 var success = await _courseAccess.DeleteCourse(request.CourseId);
 

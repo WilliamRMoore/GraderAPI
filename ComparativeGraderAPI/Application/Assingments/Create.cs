@@ -37,13 +37,13 @@ namespace ComparativeGraderAPI.Application.Assingments
         public class Handler : IRequestHandler<Command>
         {
             private readonly IAssignmentAccess _assignmentAccess;
-            private readonly ICourseVerifier _courseVerifier;
+            private readonly IDomainVerifier _domainVerifier;
             private readonly ICourseAccess _courseAccess;
 
-            public Handler(IAssignmentAccess assignmentAccess, ICourseVerifier courseVerifier, ICourseAccess courseAccess)
+            public Handler(IAssignmentAccess assignmentAccess,IDomainVerifier domainVerifier, ICourseAccess courseAccess)
             {
                 _assignmentAccess = assignmentAccess;
-                _courseVerifier = courseVerifier;
+                _domainVerifier = domainVerifier;
                 _courseAccess = courseAccess;
             }
 
@@ -51,7 +51,9 @@ namespace ComparativeGraderAPI.Application.Assingments
             {
                 var courseToAddAssignmentTo = await _courseAccess.CourseDetails(request.CourseId);
 
-                _courseVerifier.Verify(courseToAddAssignmentTo);
+                //_courseVerifier.Verify(courseToAddAssignmentTo);
+
+                _domainVerifier.Verify<Course>(courseToAddAssignmentTo);
                 
                 var assingment = new Assignment
                 {
@@ -61,7 +63,7 @@ namespace ComparativeGraderAPI.Application.Assingments
                     DueDate = request.DueDate,
                 };
 
-                var success = await _assignmentAccess.AddAssignment(assingment);
+                await _assignmentAccess.AddAssignment(assingment);
 
                 return Unit.Value;
             }

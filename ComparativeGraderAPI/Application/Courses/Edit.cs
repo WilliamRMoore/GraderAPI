@@ -1,4 +1,6 @@
 ﻿using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
+using ComparativeGraderAPI.Domain;
+using ComparativeGraderAPI.Security.Security_Interfaces;
 using FluentValidation;
 using MediatR;
 using System;
@@ -34,14 +36,21 @@ namespace ComparativeGraderAPI.Application.Courses
         public class Handler : IRequestHandler<Command>
         {
             private readonly ICourseAccess _courseAccess;
+            private readonly IDomainVerifier _domainVerifier;
 
-            public Handler(ICourseAccess courseAccess)
+            public Handler(ICourseAccess courseAccess, IDomainVerifier domainVerifier)
             {
                 _courseAccess = courseAccess;
+                _domainVerifier = domainVerifier;
             }
+
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var success = await _courseAccess.EditCourse(request.CourseId, request);
+                var courseToEdit = await _courseAccess.CourseDetails(request.CourseId);
+
+                _domainVerifier.Verify<Course>(courseToEdit);
+
+                var success = await _courseAccess.EditCourse(courseToEdit, request);
 
                 if (success) return Unit.Value;
 

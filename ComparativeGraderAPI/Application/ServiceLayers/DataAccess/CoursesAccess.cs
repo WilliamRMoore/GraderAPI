@@ -46,24 +46,15 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
             return courses;
         }
 
-        public async Task<bool> EditCourse(int courseId, Command request)//This probably shouldnt handle the command, fix this later.
+        public async Task<bool> EditCourse(Course courseToEdit, Command request)//This probably shouldnt handle the command, fix this later.
         {
-            var currentCourse = await _context.Courses.FindAsync(courseId);
-            
-            if(currentCourse == null)//Check to see if Course exists.
-            {
-                throw new RestException(HttpStatusCode.NotFound, new { activity = "NOT FOUND" });
-            }
+            //var courseToEdit = await _context.Courses.FindAsync(courseId);
 
-            if(currentCourse.ProfessorUserId != _userAccessor.GetCurrentUserId())//Make sure the current user is authorized to edit this entry.
-            {
-                throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            }
+            courseToEdit.SemesterId = request.SemesterId > 0 && courseToEdit.SemesterId != request.SemesterId ? request.SemesterId : courseToEdit.SemesterId;
+            courseToEdit.CourseName = request.CourseName ?? courseToEdit.CourseName;
+            courseToEdit.CourseDescription = request.CourseDescription ?? courseToEdit.CourseDescription;
+            courseToEdit.Year = request.Year > 0 && courseToEdit.Year != request.Year ? request.Year : courseToEdit.Year;
 
-            currentCourse.SemesterId = request.SemesterId > 0 && currentCourse.SemesterId != request.SemesterId ? request.SemesterId : currentCourse.SemesterId;
-            currentCourse.CourseName = request.CourseName ?? currentCourse.CourseName;
-            currentCourse.CourseDescription = request.CourseDescription ?? currentCourse.CourseDescription;
-            currentCourse.Year = request.Year > 0 && currentCourse.Year != request.Year ? request.Year : currentCourse.Year;
             var success = await _context.SaveChangesAsync() > 0;
 
             return success;
@@ -85,16 +76,6 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
         public async Task<Course> CourseDetails(int id)
         {
             var course = await _context.Courses.FindAsync(id);
-
-            if (course == null)
-            {
-                throw new RestException(HttpStatusCode.NotFound, new { activity = "NOT FOUND" });
-            }
-
-            if (course.ProfessorUserId != _userAccessor.GetCurrentUserId())//Make sure the current user is authorized to see this entry.
-            {
-                throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            }
 
             return course;
         }

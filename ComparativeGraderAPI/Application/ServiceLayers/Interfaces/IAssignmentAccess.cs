@@ -9,10 +9,10 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.Interfaces
 {
     public interface IAssignmentAccess
     {
-        Task<bool> AddAssignment(Assignment assignment);
+        Task AddAssignment(Assignment assignment);
         Task<IEnumerable<Assignment>> ListAssignments();
         Task<Assignment> AssignmentDetails(int id);
-        Task<bool> EditAssignment(Command assignmentEdits, Assignment assignment);
-        Task<bool> DeleteAssignment(int id);
+        Task EditAssignment(Command assignmentEdits, Assignment assignment);
+        Task DeleteAssignment(int id);
     }
 }
