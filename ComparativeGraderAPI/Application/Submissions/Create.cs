@@ -47,7 +47,7 @@ namespace ComparativeGraderAPI.Application.Submissions
             }
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var assignmentToAddSubmissionTo = _assignmentAccess.AssignmentDetails(request.AssignmentId);
+                var assignmentToAddSubmissionTo = await _assignmentAccess.AssignmentDetails(request.AssignmentId);
 
                 _domainVerifier.Verify<Assignment>(assignmentToAddSubmissionTo);
 

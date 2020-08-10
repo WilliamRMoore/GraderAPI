@@ -47,16 +47,6 @@ namespace ComparativeGraderAPI.Application.ServiceLayers.DataAccess
         {
             var assignment = await _gradingDataContext.Assignments.FindAsync(id);
 
-            if (assignment == null)
-            {
-                throw new RestException(HttpStatusCode.NotFound, new { activity = "NOT FOUND" });
-            }
-
-            if (assignment.ProfessorUserId != _userAccessor.GetCurrentUserId())//Make sure the current user is authorized to see this entry.
-            {
-                throw new RestException(HttpStatusCode.Unauthorized, new { activity = "UNAUTHORIZED" });
-            }
-
             return assignment;
         }
 

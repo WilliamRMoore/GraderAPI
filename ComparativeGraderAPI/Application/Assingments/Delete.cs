@@ -1,4 +1,5 @@
 ﻿using ComparativeGraderAPI.Application.ServiceLayers.Interfaces;
+using ComparativeGraderAPI.Domain;
 using ComparativeGraderAPI.Security.Security_Interfaces;
 using MediatR;
 using System;
@@ -20,7 +21,6 @@ namespace ComparativeGraderAPI.Application.Assingments
         {
             private readonly IAssignmentAccess _assignmentAccess;
             private readonly IDomainVerifier _domainVerifier;
-            private readonly IAssignmentVerifier _assignmentVerifier;
 
             public Handler(IAssignmentAccess assignmentAccess, IDomainVerifier domainVerifier)
             {
@@ -31,7 +31,7 @@ namespace ComparativeGraderAPI.Application.Assingments
             {
                 var assignmentToDelete = await _assignmentAccess.AssignmentDetails(request.Id);
 
-                _assignmentVerifier.Verify(assignmentToDelete);
+                _domainVerifier.Verify<Assignment>(assignmentToDelete);
 
                 await _assignmentAccess.DeleteAssignment(request.Id);
 
